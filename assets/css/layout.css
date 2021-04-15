@@ -1,0 +1,173 @@
+/* ***************** 공통 AND 메인페이지 CSS ***************** */
+
+/* Common */
+html, 
+body {
+    height: 100%;
+}
+
+body {
+    
+}
+
+.wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+}
+
+.container {
+    position: relative;
+}
+
+.content {
+    width: 100%;
+}
+
+.contain {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.contain:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+/* Header */
+.header {
+    height: 200px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+
+/* Main */
+.main-section {
+    position: relative;
+    height: 100vh;
+}
+
+.section-03 {
+    height: 200vh;
+}
+
+.text-box {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 20px;
+    line-height: 1.5;
+    color: #222;
+    margin-bottom: 30px;
+}
+
+.icon {
+    width: 140px;
+    height: 140px;
+    color: #fff;
+    font-size: 40px;
+    line-height: 140px;
+    text-align: center;
+    background-color: #999;
+    border-radius: 100%;    
+}
+
+.icon2 {
+    width: 100px;
+    height: 100px;
+    color: #fff;
+    font-size: 30px;
+    line-height: 100px;
+    text-align: center;
+    background-color: blue;
+    border-radius: 100%;
+    position: absolute;
+    right: 0;
+    top: 100px;
+    opacity: 0;
+}
+
+.icon3 {
+    width: 70px;
+    height: 70px;
+    color: #fff;
+    font-size: 20px;
+    line-height: 70px;
+    text-align: center;
+    background-color: red;
+    border-radius: 100%;  
+    position: absolute;
+    top: 200px;
+    left: 0;  
+    opacity: 0;
+}
+
+.icon4 {
+    width: 140px;
+    height: 140px;
+    color: #fff;
+    font-size: 40px;
+    line-height: 140px;
+    text-align: center;
+    background-color: black;
+    margin: 0 auto;
+}
+
+.bg1 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    opacity: 1;
+    z-index: 10;
+}
+
+.horizontal-content-wrap {
+    overflow-x: hidden;
+}
+
+.horizontal-content {
+    width: 400vw; 
+    height: 100vh; 
+    display: flex; 
+    flex-direction: row;
+}
+
+.horizontal-content .content-01,
+.horizontal-content .content-02,
+.horizontal-content .content-03,
+.horizontal-content .content-04 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw; height: 100%;
+    min-width:100vw;
+}
+
+.horizontal-content .content-01 {
+    width: 150vw;
+    min-width:150vw;
+}
+.horizontal-content .content-02 {
+    width: 50vw;
+    min-width:50vw;
+}
+.horizontal-content .content-03 {
+    width: 50vw;
+    min-width:50vw;
+}
+.horizontal-content .content-04 {
+    width: 150vw;
+    min-width:150vw;
+}
+
+/* Footer */
+.footer {
+    height: 200px;
+    border: 1px solid #d1d1d1;
+    background-color: #fff;
+}

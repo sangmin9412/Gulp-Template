@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>test</title>
+
+  <style>
+    span.active {
+      color: red;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="wrap">
+    <div class="form-row">
+      <p></p>
+      <input type="text" class="input" data-text="123123">
+    </div>
+    <div class="form-row">
+      <p></p>
+      <input type="text" class="input" data-text="234 234">
+    </div>
+    <div class="form-row">
+      <p></p>
+      <input type="text" class="input" data-text="345345">
+    </div>
+    <div class="form-row">
+      <p></p>
+      <input type="text" class="input" data-text="test test">
+    </div>
+  </div>
+
+  <script>
+    const totalArr = [];
+
+    document.addEventListener("DOMContentLoaded", function(){
+      var _input = document.querySelectorAll(".input");
+
+      init(_input);
+    });
+
+    function init (obj) {
+
+      obj.forEach((v, i) => {
+        const dataText = v.dataset.text;
+        const textEl = v.parentElement.querySelector("p");
+
+        let text = "";
+        Array.from(dataText).forEach((t) => {
+          text += `<span>${t}</span>`;
+        });
+        textEl.innerHTML = text;
+
+        v.addEventListener("keydown", (e) => { onKeyupInput(e, i, textEl.querySelectorAll("span"), dataText.length) })
+        v.addEventListener("keyup", (e) => { onKeyupInput(e, i, textEl.querySelectorAll("span"), dataText.length) })
+        v.addEventListener("change", (e) => { onKeyupInput(e, i, textEl.querySelectorAll("span"), dataText.length) })
+      });
+    }
+
+    function onKeyupInput (e, idx, elArr, tl) {
+      const _this = e.target;
+      const currentIdx = _this.value.length - 1;
+      const resultArr = [];
+
+      elArr.forEach((v, i) => {
+        if (i > currentIdx) {
+          v.classList.remove("active");
+        }
+      });
+      
+      if (currentIdx > -1) {
+        for (let i = 0; i < _this.value.length; i++) {
+          if (elArr[i].innerHTML == _this.value[i]) {
+            elArr[i].classList.add("active");
+            resultArr[i] = true;
+          } else {
+            resultArr[i] = false;
+          }
+        }  
+      }
+
+      if (_this.value.length >= tl) {
+        const pIdx = _this.parentElement;
+        _this.value = new String(_this.value).slice(0, tl);
+        _this.setAttribute("disabled", "disabled");
+
+        const _resultFilter = resultArr.filter((v) => {
+          if (!v) {
+            return [v];
+          }
+        });
+
+        totalArr[idx] = {
+          a: tl,
+          b: _resultFilter.length,
+        };
+
+        if (_this.parentElement.nextElementSibling !== null) {
+          _this.parentElement.nextElementSibling.querySelector("input").focus();
+          _this.parentElement.nextElementSibling.querySelector("input").value = "";
+
+        } else {
+          let t = 0;
+          let r = 0;
+          totalArr.forEach((v) => {
+            t += v.a;
+            r += v.b;
+          });
+
+          console.log(Math.floor(100 - (r / t * 100)) + "%");
+        }
+        console.log(totalArr);
+      }
+    }
+  </script>
+</body>
+</html>

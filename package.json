@@ -1,0 +1,25 @@
+{
+  "name": "momq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gulp": "gulp watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "7.12.10",
+    "@babel/preset-env": "7.12.11",
+    "babel-preset-minify": "0.5.1",
+    "gulp": "4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-babel": "8.0.0",
+    "gulp-concat": "2.6.1",
+    "gulp-livereload": "^4.0.2",
+    "gulp-minify-css": "1.2.4"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ]
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.closest%DocumentFragment.prototype.prepend"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .select-box {
+      display: inline-block;
+      position: relative;
+      margin: 10px;
+      z-index: 10;
+    }
+    .select-box.active {
+      z-index: 100;
+    }
+    span.selected {
+      display: block;
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+    }
+    .select-box.active span.selected{
+      border-color: red;
+    }
+    .select-list {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: calc(100% + 10px);
+      border: 1px solid #f1f1f1;
+      background: #fff;
+      padding: 5px;
+    }
+    .select-box.active .select-list{
+      display: block;
+    }
+    .select-item {
+      list-style: none;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="select-box type-1">
+    <input type="hidden" name="t" id="tVal1">
+    <ul class="select-list">
+      <li class="select-item">
+        <button type="button" data-realval="1">option-1</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="2">option-2</button>
+      </li>
+      <li class="select-item selected">
+        <button type="button" data-realval="3">option-3</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="4">option-4</button>
+      </li>
+    </ul>
+  </div>
+
+  <hr />
+
+  <div class="select-box type-1">
+    <input type="hidden" name="t" id="tVal2">
+    <ul class="select-list">
+      <li class="select-item">
+        <button type="button" data-realval="11">option-1</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="22">option-22</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="33">option-33</button>
+      </li>
+      <li class="select-item selected">
+        <button type="button" data-realval="44">option-44</button>
+      </li>
+    </ul>
+  </div>
+
+  <hr />
+
+  <div class="select-box type-1">
+    <input type="hidden" name="t" id="tVal3">
+    <ul class="select-list">
+      <li class="select-item">
+        <button type="button" data-realval="111">option-111</button>
+      </li>
+      <li class="select-item selected">
+        <button type="button" data-realval="222">option-222</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="333">option-333</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="444">option-444</button>
+      </li>
+    </ul>
+  </div>
+
+  <hr />
+
+  <div class="select-box type-1">
+    <input type="hidden" name="t" id="tVal4">
+    <ul class="select-list">
+      <li class="select-item">
+        <button type="button" data-realval="1111">option-1111</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="2222">option-2222</button>
+      </li>
+      <li class="select-item selected">
+        <button type="button" data-realval="3333">option-3333</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="4444">option-4444</button>
+      </li>
+    </ul>
+  </div>
+
+  <hr />
+
+  <div class="select-box type-2">
+    <input type="hidden" name="t" id="tVal5">
+    <ul class="select-list">
+      <li class="select-item">
+        <button type="button" data-realval="1111">option-1111</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="2222">option-2222</button>
+      </li>
+      <li class="select-item selected">
+        <button type="button" data-realval="3333">option-3333</button>
+      </li>
+      <li class="select-item">
+        <button type="button" data-realval="4444">option-4444</button>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    NodeList.prototype.forEach = Array.prototype.forEach;
+
+    function setSelectBox(el, change) {
+      const _select = document.querySelectorAll(el);
+      _select.forEach(function(el) {
+        const firstEl = el.querySelector(".select-item.selected") || el.querySelectorAll(".select-item")[0];
+        const firstVal = firstEl.querySelector("button").innerHTML;
+        const firstVal2 = firstEl.querySelector("button").dataset.realval;
+
+        const _optionEl = el.querySelectorAll(".select-item");
+        const _inputEl = el.querySelector("input");
+        const _selectedEl = document.createElement("span");
+
+        _selectedEl.classList.add("selected");
+        _selectedEl.innerHTML = firstVal;
+        _inputEl.value = firstVal2;
+        el.prepend(_selectedEl);
+
+        _selectedEl.addEventListener("click", function (e) {
+          if (!e.target.parentNode.classList.contains("active")) {
+            selectClose();
+            e.target.parentNode.classList.add("active");
+          } else {
+            e.target.parentNode.classList.remove("active");
+          }
+        });
+
+        _optionEl.forEach(function(o) {
+          o.querySelector("button").addEventListener("click", function(e) {
+            _selectedEl.innerHTML = e.target.innerHTML;
+            _inputEl.value = e.target.dataset.realval;
+            change(_inputEl);
+            selectClose();
+          });
+        });
+        
+      });
+    }
+
+    setSelectBox(".select-box.type-1", onChangeHandler1);
+    setSelectBox(".select-box.type-2", onChangeHandler2);
+
+    document.addEventListener("click", function(e) {
+      selectClose(e.target);
+    })
+
+    function selectClose(el) {
+      if (el === undefined || el.closest(".select-box") === null) {
+        if (document.querySelector(".select-box.active") != null) {
+          document.querySelector(".select-box.active").classList.remove("active");
+        }
+      }
+    }
+
+    function onChangeHandler1(input) {
+      alert(1 + " - " + input.value);
+    }
+
+    function onChangeHandler2(input) {
+      alert(2 + " - " + input.value);
+    }
+  </script>
+</body>
+</html>
