@@ -149,23 +149,23 @@
   <script>
     NodeList.prototype.forEach = Array.prototype.forEach;
 
-    function setSelectBox(el, change) {
-      const _select = document.querySelectorAll(el);
-      _select.forEach(function(el) {
+    function setSelectBox(el, change, options) {
+      const $select = document.querySelectorAll(el);
+      $select.forEach(function(el) {
         const firstEl = el.querySelector(".select-item.selected") || el.querySelectorAll(".select-item")[0];
         const firstVal = firstEl.querySelector("button").innerHTML;
         const firstVal2 = firstEl.querySelector("button").dataset.realval;
 
-        const _optionEl = el.querySelectorAll(".select-item");
-        const _inputEl = el.querySelector("input");
-        const _selectedEl = document.createElement("span");
+        const $optionEl = el.querySelectorAll(".select-item");
+        const $inputEl = el.querySelector("input");
+        const $selectedEl = document.createElement("span");
 
-        _selectedEl.classList.add("selected");
-        _selectedEl.innerHTML = firstVal;
-        _inputEl.value = firstVal2;
-        el.prepend(_selectedEl);
+        $selectedEl.classList.add("selected");
+        $selectedEl.innerHTML = firstVal;
+        $inputEl.value = firstVal2;
+        el.prepend($selectedEl);
 
-        _selectedEl.addEventListener("click", function (e) {
+        $selectedEl.addEventListener("click", function (e) {
           if (!e.target.parentNode.classList.contains("active")) {
             selectClose();
             e.target.parentNode.classList.add("active");
@@ -174,11 +174,11 @@
           }
         });
 
-        _optionEl.forEach(function(o) {
+        $optionEl.forEach(function(o) {
           o.querySelector("button").addEventListener("click", function(e) {
-            _selectedEl.innerHTML = e.target.innerHTML;
-            _inputEl.value = e.target.dataset.realval;
-            change(_inputEl);
+            $selectedEl.innerHTML = e.target.innerHTML;
+            $inputEl.value = e.target.dataset.realval;
+            change($inputEl);
             selectClose();
           });
         });

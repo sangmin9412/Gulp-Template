@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=
+  , initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing:border-box;
+    }
+
+    .scroll-view {
+      overflow: hidden;
+    }
+
+    .scroll-inner {
+      height: 100%; 
+      overflow-y: scroll;
+    }
+
+    .scroll-inner {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scroll-inner::-webkit-scrollbar {
+      display:none;
+    }
+
+    .scroll-content {
+      overflow: hidden;
+      font-size: 0;
+    }
+
+    .scroll-content p {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .scroll-content p span {
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-view" data-scroll-target="#p1">
+    <div class="scroll-inner">
+      <div class="scroll-content">
+        <p id="p1" style="width: 1100px; height: 270px; font-size: 50px; font-weight: bold;">
+          <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae nobis adipisci pariatur 
+        </p>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="scroll-view" data-scroll-target="#p2">
+    <div class="scroll-inner">
+      <div class="scroll-content">
+        <p id="p2" style="width: 5500px; height: 270px; font-size: 50px; font-weight: bold;">
+          <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae nobis adipisci pariatur numquam iure temporibus aliquid, alias, deserunt nam libero totam? Harum incidunt ad inventore minima possimus exercitationem, quas asperiores.
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium dolorem similique repellat expedita delectus quos, quisquam tenetur quo nulla magnam impedit optio, culpa tempora earum numquam laborum illum, officiis aliquam!</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="scroll-view" data-scroll-target="#p3">
+    <div class="scroll-inner">
+      <div class="scroll-content">
+        <p id="p3" style="width: 5500px; height: 270px; font-size: 50px; font-weight: bold;">
+          <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae nobis adipisci pariatur numquam iure temporibus aliquid, alias, deserunt nam libero totam? Harum incidunt ad inventore minima possimus exercitationem, quas asperiores.
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium dolorem similique repellat expedita delectus quos, quisquam tenetur quo nulla magnam impedit optio, culpa tempora earum numquam laborum illum, officiis aliquam!</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <script>
+    function HorizontalScroll (target, options) {
+      const p = document.querySelector(`.scroll-view[data-scroll-target='${target}']`);
+      const t = document.querySelector(target);
+      const scrollInner = p.querySelector(".scroll-inner");
+      const scrollContent = p.querySelector(".scroll-content");
+      const windowWidth = window.innerWidth;
+
+      p.style.height = `${t.offsetHeight}px`;
+
+      this.options = {
+        speed: 500,
+        auto: false,
+        progress: 0,
+        infinity: false,
+        infinityRaf: undefined,
+        mouseover: false,
+        ...options
+      }
+
+      this.afterCallback = undefined;
+
+      this.autoScroll = () => {
+        const { options, afterCallback } = this;
+        let limit;
+        if (options.infinity) {
+          limit = t.offsetWidth;
+
+        } else {
+          limit = t.offsetWidth - windowWidth;
+        }
+        let i = options.progress | 0;
+        
+        function move () {
+          // console.log(i);
+          t.style.transform = `translateX(-${i}px)`;
+
+          if (options.infinity) {
+            i = i >= t.offsetWidth / 3 ? 0 : i;
+          }
+
+          if (!(i >= limit)) {
+            options.infinityRaf = requestAnimationFrame(move);
+          } else {
+            cancelAnimationFrame(options.infinityRaf);
+            if (typeof afterCallback === "function") {
+              afterCallback();
+            }
+          }
+          i += (options.speed / 100);
+          options.progress = i;
+        }
+
+        move();
+      }
+
+      this.start = () => {
+        const { autoScroll } = this;
+        autoScroll();
+      }
+
+      this.stop = () => {
+        const { options } = this;
+        cancelAnimationFrame(options.infinityRaf);
+      }
+
+      this.init = () => {
+        const { options, autoScroll } = this;
+        if (options.auto) {
+
+          if (options.infinity) {
+            const children = t.children[0];
+            const width_x3 = t.offsetWidth * 3
+
+            Array(2).fill().forEach(v => {
+              t.appendChild(children.cloneNode(true));
+            });
+
+            t.style.width = `${width_x3}px`
+            scrollContent.style.height = `${width_x3}px`;
+
+            autoScroll();
+          } else {
+            autoScroll();
+          }
+
+        } else {
+          scrollContent.style.height = `${t.offsetWidth - windowWidth + t.offsetHeight}px`;
+
+          scrollInner.addEventListener("scroll", function(e) {
+            t.style.transform = `translate(-${e.target.scrollTop}px, ${e.target.scrollTop}px)`;
+          });
+        }
+      }
+
+      if (this.options.mouseover) {
+        t.addEventListener("mouseover", this.stop);
+        t.addEventListener("mouseleave", this.start);
+      }
+
+      return this;
+    }
+
+    const hsObj_1 = new HorizontalScroll("#p1", {
+      speed: 500,
+      auto: true,
+      infinity: true,
+      mouseover: true,
+    });
+
+    console.log(hsObj_1);
+
+    hsObj_1.init();
+
+    const hsObj_2 = new HorizontalScroll("#p2");
+    const hsObj_3 = new HorizontalScroll("#p3");
+
+    hsObj_2.init();
+    hsObj_3.init();
+  </script>
+</body>
+</html>
